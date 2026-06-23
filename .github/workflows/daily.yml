@@ -1,0 +1,23 @@
+name: Daily Case Study
+
+on:
+  schedule:
+    # 3:30 AM UTC = 9:00 AM IST (adjust for your timezone)
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  send-case-study:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Send case study
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python send_case_study.py
